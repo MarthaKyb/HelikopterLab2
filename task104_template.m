@@ -1,6 +1,6 @@
 % TTK4135 - Helicopter lab
 % Hints/template for problem 2.
-% Updated spring 2018, Andreas L. Flåten
+% Updated spring 2018, Andreas L. Flï¿½ten
 
 %% Initialization and model definition
 init08; % Change this to the init file corresponding to your helicopter
@@ -84,9 +84,11 @@ func = @(z)(1/2)*(z'*Q*z);              % Objective function
 Aeq = gen_aeq(A1,B1,N,mx,mu);                             % Generate A
 beq = [A1*x0; zeros(234,1)];                              % Generate b
 
+options = optimoptions('fmincon','Algorithm','sqp','MaxFunEvals', 50000);
+
 %% Solve SQP problem with unlinear constraints
 tic
-[z,lambda] = fmincon(func, z0, [] ,[], Aeq, beq, vlb, vub, @ineqcon); 
+[z,lambda] = fmincon(func, z0, [] ,[], Aeq, beq, vlb, vub, @ineqcon, options); 
 t1=toc;
 
 % Unlinear constraint vector
@@ -132,8 +134,8 @@ t = 0:delta_t:delta_t*(length(u1)-1);
 
 
 % LQC - Wight matrices
-Q_lqr = diag([10 ,1,1,0.1, 15, 1]);
-             %l %r %p %p_dot %e %e_dot
+Q_lqr = diag([10, 1, 1, 0.1, 15, 1]);
+             %l  %r  %p %p_dot %e %e_dot
 R_lqr = diag([1, 0.1]); 
           %p_c  %e_c
 
@@ -153,35 +155,35 @@ u_star = [t', u1, u2];
 
 %% Plotting
 % 
-figure(2)
-subplot(811)
-stairs(t,u1),grid
-ylabel('p_c')
-ylim([-0.5, 0.5]);
-subplot(812)
-stairs(t,u2),grid
-ylabel('e_c')
-ylim([-0.2, 0.5]);
-subplot(813)
-plot(t,x1,'m',t,x1,'mo'),grid
-ylabel('Travel')
-subplot(814)
-plot(t,x2,'m',t,x2','mo'),grid
-ylabel('Travel rate')
-subplot(815)
-plot(t,x3,'m',t,x3,'mo'),grid
-ylabel('Pitch')
-ylim([-0.7, 0.7]);
-subplot(816)
-plot(t,x4,'m',t,x4','mo'),grid
-ylabel('Pitch rate')
-ylim([-0.7, 0.7]);
-subplot(817)
-plot(t,x5,'m',t,x5','mo'),grid
-ylabel('Elev.')
-subplot(818)
-plot(t,x6,'m',t,x6','mo'),grid
-xlabel('Time [sec]'),ylabel('Elev')
-ylim([-0.5, 0.5]);
-print -depsc task104_optimal
+% figure(2)
+% subplot(811)
+% stairs(t,u1),grid
+% ylabel('p_c')
+% ylim([-0.5, 0.5]);
+% subplot(812)
+% stairs(t,u2),grid
+% ylabel('e_c')
+% ylim([-0.2, 0.5]);
+% subplot(813)
+% plot(t,x1,'m',t,x1,'mo'),grid
+% ylabel('Travel')
+% subplot(814)
+% plot(t,x2,'m',t,x2','mo'),grid
+% ylabel('Travel rate')
+% subplot(815)
+% plot(t,x3,'m',t,x3,'mo'),grid
+% ylabel('Pitch')
+% ylim([-0.7, 0.7]);
+% subplot(816)
+% plot(t,x4,'m',t,x4','mo'),grid
+% ylabel('Pitch rate')
+% ylim([-0.7, 0.7]);
+% subplot(817)
+% plot(t,x5,'m',t,x5','mo'),grid
+% ylabel('Elev.')
+% subplot(818)
+% plot(t,x6,'m',t,x6','mo'),grid
+% xlabel('Time [sec]'),ylabel('Elev. rate')
+% ylim([-0.5, 0.5]);
+% print -depsc task104_optimal
 
